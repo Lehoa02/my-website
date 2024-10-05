@@ -4,7 +4,63 @@
     box-sizing: border-box;
 }
 
+/* General styles (applied to all devices) */
+body {
+    font-size: 16px;
+}
 
+/* Mobile devices (up to 600px) */
+@media only screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .project-card {
+        width: 100%; /* Make the project cards full-width on mobile */
+    }
+
+    /* Reduce font sizes, hide large elements, adjust paddings, etc. */
+    h1, h2, h3 {
+        font-size: 1.5em;
+    }
+
+    /* Adjust layout for smaller screens */
+    .skills-grid {
+        display: block; /* Stack the skill boxes vertically */
+        width: 100%;
+    }
+
+    .project-image img {
+        width: 100%; /* Ensure images take full width of the screen */
+    }
+}
+
+/* Tablet devices (up to 768px) */
+@media only screen and (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
+    .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* Adjust grid layout for projects */
+    .projects-grid {
+        grid-template-columns: 1fr; /* Single column layout on smaller screens */
+    }
+
+    .project-card {
+        width: 90%;
+        margin: auto; /* Center project cards on smaller screens */
+    }
+}
 
 
 body {
@@ -376,10 +432,16 @@ header {
 }
 
 .navbar {
-    
+    justify-content: space-between;
     display: flex;
     align-items: center;
     width: 100%; /* Ensuring full width */
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column; /* Stack navbar items on top of each other */
+    }
 }
 
 .navbar a {
