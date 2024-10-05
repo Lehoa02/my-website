@@ -381,14 +381,6 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     }
 });
 
-function setupCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawGradientBackground();
-}
-
-window.addEventListener("resize", setupCanvas);
-setupCanvas();  // Call it once on page load
 
 
 
