@@ -4,61 +4,86 @@
     box-sizing: border-box;
 }
 
-/* General styles (applied to all devices) */
-body {
-    font-size: 16px;
-}
-
-/* Mobile devices (up to 600px) */
+/* Mobile-specific styles */
 @media only screen and (max-width: 600px) {
-    body {
-        font-size: 14px;
-    }
-    
+    /* Navbar adjustments for mobile */
     .navbar {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: column; /* Stack items vertically */
+        align-items: center;
     }
 
-    .project-card {
-        width: 100%; /* Make the project cards full-width on mobile */
+    .navbar a {
+        font-size: 14px;
+        padding: 10px 0;
     }
 
-    /* Reduce font sizes, hide large elements, adjust paddings, etc. */
+    .get-in-touch {
+        width: 100%;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    /* Section and text adjustments for mobile */
+    section {
+        padding: 20px;
+        font-size: 16px;
+    }
+
     h1, h2, h3 {
         font-size: 1.5em;
     }
 
-    /* Adjust layout for smaller screens */
-    .skills-grid {
-        display: block; /* Stack the skill boxes vertically */
+    p {
+        font-size: 14px;
+    }
+
+    /* Image responsiveness */
+    img {
+        width: 100%;
+        height: auto;
+        max-width: 600px;
+    }
+
+    /* Circular progress bar size for mobile */
+    .circular-progress {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Project card adjustments for mobile */
+    .project-card {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    /* Footer adjustments for mobile */
+    footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-left, .footer-right {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* General button styling for mobile */
+    button {
+        padding: 12px 20px;
+        font-size: 16px;
         width: 100%;
     }
 
-    .project-image img {
-        width: 100%; /* Ensure images take full width of the screen */
-    }
-}
-
-/* Tablet devices (up to 768px) */
-@media only screen and (max-width: 768px) {
-    body {
-        font-size: 15px;
+    /* Mobile-specific touch targets */
+    button, a {
+        padding: 12px;
+        font-size: 16px;
     }
 
-    .navbar {
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    /* Adjust grid layout for projects */
-    .projects-grid {
-        grid-template-columns: 1fr; /* Single column layout on smaller screens */
-    }
-
-    .project-card {
-        width: 90%;
-        margin: auto; /* Center project cards on smaller screens */
+    /* Optional: disable heavy animations for mobile */
+    .jump-i {
+        animation: none; /* Disable heavy animations */
     }
 }
 
