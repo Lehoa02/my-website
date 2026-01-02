@@ -518,6 +518,14 @@ section{
     transition: opacity 2.5s ease-out, transform 1s ease-out; /* Smooth transition */
 }
 
+#about p {
+  color: rgba(211, 172, 255, 0.9); /* brighter, cool white */
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 900px;
+  margin: 0 auto 3rem auto;
+}
+
 #about.visible {
     opacity: 1;
     transform: translateY(0); /* Slide to its original position */
@@ -750,13 +758,13 @@ section{
     animation: anim-80 2s linear forwards;
 }
 
-.circle-75 {
+.circle-90 {
     fill: none;
     stroke: url(#GradientColor);
     stroke-width: 20px;
     stroke-dasharray: 472;
     stroke-dashoffset: 472;
-    animation: anim-75 2s linear forwards;
+    animation: anim-90 2s linear forwards;
 }
 
 .circle-87 {
@@ -767,14 +775,22 @@ section{
     stroke-dashoffset: 472;
     animation: anim-87 2s linear forwards;
 }
-
-.circle-65 {
+.circle-73 {
     fill: none;
     stroke: url(#GradientColor);
     stroke-width: 20px;
     stroke-dasharray: 472;
     stroke-dashoffset: 472;
-    animation: anim-65 2s linear forwards;
+    animation: anim-73 2s linear forwards;
+}
+
+.circle-75 {
+    fill: none;
+    stroke: url(#GradientColor);
+    stroke-width: 20px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+    animation: anim-75 2s linear forwards;
 }
 
 .circle-82 {
@@ -784,6 +800,15 @@ section{
     stroke-dasharray: 472;
     stroke-dashoffset: 472;
     animation: anim-82 2s linear forwards;
+}
+
+.circle-85 {
+    fill: none;
+    stroke: url(#GradientColor);
+    stroke-width: 20px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+    animation: anim-85 2s linear forwards;
 }
 
 
@@ -796,10 +821,11 @@ svg {
 
 .circle-70,
 .circle-80,
-.circle-65,
+.circle-90,
+.circle-73,
 .circle-82,
 .circle-75,
-.circle-87 {
+.circle-85 {
     stroke-dashoffset: 472; /* Full circumference to hide the stroke */
     transition: stroke-dashoffset 2s linear; /* Smooth transition */
 }

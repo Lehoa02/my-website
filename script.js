@@ -147,10 +147,11 @@ document.addEventListener("DOMContentLoaded", function() {
             if (entry.isIntersecting && !hasAnimated) {
                 // Start the animations
                 document.querySelector('.circle-80').style.strokeDashoffset = '144'; 
-                document.querySelector('.circle-75').style.strokeDashoffset = '168';
-                document.querySelector('.circle-87').style.strokeDashoffset = '111';
+                document.querySelector('.circle-90').style.strokeDashoffset = '85'; 
+                document.querySelector('.circle-85').style.strokeDashoffset = '130'; 
+                document.querySelector('.circle-73').style.strokeDashoffset = '180'; 
                 document.querySelector('.circle-70').style.strokeDashoffset = '198';
-                document.querySelector('.circle-65').style.strokeDashoffset = '215';
+                document.querySelector('.circle-75').style.strokeDashoffset = '168'; 
                 document.querySelector('.circle-82').style.strokeDashoffset = '135';
 
                 // Start the counter animation
@@ -166,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function startCounters() {
         let pythonCounter = 0;
+        let numberUnreal = 0;
         let javaCounter = 0;
         let cppCounter = 0;
         let htmlCounter = 0;
@@ -177,28 +179,33 @@ document.addEventListener("DOMContentLoaded", function() {
             else { pythonCounter += 1; document.getElementById("number-python").innerHTML = pythonCounter + "%"; }
         }, 20);
 
+        let intervalUnreal= setInterval(() => {
+            if (numberUnreal == 85) { clearInterval(intervalUnreal); } 
+            else { numberUnreal += 1; document.getElementById("number-unreal").innerHTML = numberUnreal + "%"; }
+        }, 20);
+
         let intervalJava = setInterval(() => {
-            if (javaCounter == 75) { clearInterval(intervalJava); } 
+            if (javaCounter == 82) { clearInterval(intervalJava); } 
             else { javaCounter += 1; document.getElementById("number-java").innerHTML = javaCounter + "%"; }
         }, 20);
 
         let intervalCpp = setInterval(() => {
-            if (cppCounter == 87) { clearInterval(intervalCpp); } 
+            if (cppCounter == 70) { clearInterval(intervalCpp); } 
             else { cppCounter += 1; document.getElementById("number-cpp").innerHTML = cppCounter + "%"; }
         }, 20);
 
         let intervalHTML = setInterval(() => {
-            if (htmlCounter == 70) { clearInterval(intervalHTML); } 
+            if (htmlCounter == 73) { clearInterval(intervalHTML); } 
             else { htmlCounter += 1; document.getElementById("number-html").innerHTML = htmlCounter + "%"; }
         }, 20);
 
         let intervalSQL = setInterval(() => {
-            if (sqlCounter == 65) { clearInterval(intervalSQL); } 
+            if (sqlCounter == 90) { clearInterval(intervalSQL); } 
             else { sqlCounter += 1; document.getElementById("number-sql").innerHTML = sqlCounter + "%"; }
         }, 20);
 
         let intervalAWS = setInterval(() => {
-            if (awsCounter == 82) { clearInterval(intervalAWS); } 
+            if (awsCounter == 75) { clearInterval(intervalAWS); } 
             else { awsCounter += 1; document.getElementById("number-aws").innerHTML = awsCounter + "%"; }
         }, 20);
     }
