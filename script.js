@@ -342,7 +342,7 @@ const projectData = [
     },
     {
         title: 'Resume AI Matcher',
-        description: 'A comprehensive banking solution that automates core banking operations. The project explores data handling, transaction flow, and a cleaner way to manage repeated financial tasks.',
+        description: 'An AI-driven resume matching system that compares resumes against job descriptions using NLP techniques. It analyzes skill relevance, formatting, and keyword alignment to generate actionable feedback.',
         image: 'ai.png',
         imageAlt: 'Project 3 screenshot',
         tags: ['Jupyter Notebook', 'Python', 'Pandas', 'Scikit-learn'],
@@ -373,7 +373,7 @@ const projectData = [
     
     {
         title: 'Mobile App - Magic ToDo Ball',
-        description: 'Dummy project placeholder for an internal tool or research workflow. This is a good spot for a short summary of the problem, approach, and any useful features.',
+        description: 'A fun and interactive to-do list app that uses a Magic 8 Ball concept to randomly choose tasks. Developed in Android Studio with Java to make task selection more engaging and less overwhelming.',
         image: 'pic2.jpg',
         imageAlt: 'Placeholder project screenshot',
         tags: ['Java', 'HTML', 'CSS'],
@@ -383,7 +383,7 @@ const projectData = [
     },
     {
         title: 'Space Invaders Game',
-        description: 'Dummy project placeholder for a polished landing page or case study. You can replace this with a richer project summary, a result statement, or a few implementation notes.',
+        description: 'A 2D arcade-style Space Invaders game built with Java and JavaFX. Implements player movement, enemy patterns, collision detection, and real-time score updates.',
         image: 'pic1.jpg',
         imageAlt: 'Placeholder project screenshot',
         tags: ['TypeScript', 'UI', 'Motion'],
