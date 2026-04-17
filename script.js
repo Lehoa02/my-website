@@ -461,16 +461,19 @@ function createProjectCard(project) {
         variant: 'code',
     });
 
-    const liveDemoButton = createProjectAction({
-        href: project.demoLink,
-        label: 'Live demo',
-        ariaLabel: project.demoLink ? `Open ${project.title} live demo` : `${project.title} live demo coming soon`,
-        iconClass: 'bx bx-link-external',
-        variant: 'demo',
-        disabled: !project.demoLink,
-    });
+    actions.append(githubButton);
 
-    actions.append(githubButton, liveDemoButton);
+    if (project.demoLink) {
+        const liveDemoButton = createProjectAction({
+            href: project.demoLink,
+            label: 'Live demo',
+            ariaLabel: `Open ${project.title} live demo`,
+            iconClass: 'bx bx-link-external',
+            variant: 'demo',
+        });
+
+        actions.append(liveDemoButton);
+    }
 
     card.append(imageWrap, title, description, languages, actions);
     return card;
