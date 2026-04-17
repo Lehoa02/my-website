@@ -170,6 +170,83 @@ if (themeToggle) {
     });
 }
 
+const navToggle = document.getElementById("nav-toggle");
+const navBackdrop = document.getElementById("nav-backdrop");
+const siteNav = document.getElementById("site-nav");
+const mobileNavQuery = window.matchMedia("(max-width: 768px)");
+
+function syncNavState(isOpen) {
+    if (!navToggle) {
+        return;
+    }
+
+    const icon = navToggle.querySelector("i");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+    navToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+
+    if (icon) {
+        icon.className = isOpen ? "bx bx-x" : "bx bx-menu";
+    }
+}
+
+function closeNav() {
+    document.body.classList.remove("nav-open");
+
+    if (navBackdrop) {
+        navBackdrop.hidden = true;
+    }
+
+    syncNavState(false);
+}
+
+function openNav() {
+    if (!siteNav || !mobileNavQuery.matches) {
+        return;
+    }
+
+    document.body.classList.add("nav-open");
+
+    if (navBackdrop) {
+        navBackdrop.hidden = false;
+    }
+
+    syncNavState(true);
+}
+
+if (navToggle && siteNav) {
+    navToggle.addEventListener("click", () => {
+        if (document.body.classList.contains("nav-open")) {
+            closeNav();
+        } else {
+            openNav();
+        }
+    });
+
+    navBackdrop?.addEventListener("click", closeNav);
+
+    siteNav.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            if (mobileNavQuery.matches) {
+                closeNav();
+            }
+        });
+    });
+
+    mobileNavQuery.addEventListener("change", event => {
+        if (!event.matches) {
+            closeNav();
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closeNav();
+        }
+    });
+
+    syncNavState(false);
+}
+
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -313,7 +390,7 @@ const projectData = [
     {
         title: 'ExpenseTracker',
         description: 'A full-stack expense tracking application designed to help users manage spending, analyze financial patterns, and stay on budget, featuring real-time dashboards, recurring transactions, and AI-powered insights.',
-        image: 'expense-tracker.png',
+        image: 'image/expense-tracker.png',
         imageAlt: 'ExpenseTracker screenshot',
         tags: ['React', 'JavaScript', 'Tailwind CSS', 'Node.js', 'JWT', 'MongoDB'],
         link: 'https://github.com/Lehoa02/ExpenseTracker',
@@ -323,7 +400,7 @@ const projectData = [
     {
         title: 'Distributed Audio Processing System',
         description: 'A distributed system for parallel audio processing. The application handles asynchronous file uploads, processes audio data concurrently, and extracts features such as spectral centroid, bandwidth, and loudness.',
-        image: 'audio2.png',
+        image: 'image/audio2.png',
         imageAlt: 'Audio Processing System screenshot',
         tags: ['Python', 'Redis', 'Celery', 'Audio Processing', 'JavaScript', 'Flask'],
         link: 'https://github.com/Lehoa02/Distributed-Audio-Processing-System',
@@ -333,7 +410,7 @@ const projectData = [
     {
         title: 'Pirate Shooter 3D Game',
         description: 'A 3D action game where players take on the role of a pirate captain, engaging in naval battles and treasure hunts.',
-        image: 'pirate.png',
+        image: 'image/pirate.png',
         imageAlt: 'Pirate Shooter 3D Game screenshot',
         tags: ['C++', 'Unreal Engine'],
         link: 'https://github.com/Lehoa02/Pirate-Shooter-3D-Game',
@@ -343,7 +420,7 @@ const projectData = [
     {
         title: 'Resume AI Matcher',
         description: 'An AI-driven resume matching system that compares resumes against job descriptions using NLP techniques. It analyzes skill relevance, formatting, and keyword alignment to generate actionable feedback.',
-        image: 'ai.png',
+        image: 'image/ai.png',
         imageAlt: 'Project 3 screenshot',
         tags: ['Jupyter Notebook', 'Python', 'Pandas', 'Scikit-learn'],
         link: 'https://github.com/Lehoa02/Resume_AI',
@@ -353,7 +430,7 @@ const projectData = [
     {
         title: 'Celery Calculator',
         description: 'A simple calculator application built with Celery for distributed task processing.',
-        image: 'image.png',
+        image: 'image/image.png',
         imageAlt: 'Celery Calculator screenshot',
         tags: ['Python', 'Celery', 'Flask'],
         link: 'https://github.com/Lehoa02/CeletyCalculator',
@@ -363,7 +440,7 @@ const projectData = [
     {
         title: 'Advanced Bank Management System',
         description: 'A comprehensive banking solution that automates core banking operations. The project explores data handling, transaction flow, and a cleaner way to manage repeated financial tasks.',
-        image: 'pic3.jpg',
+        image: 'image/pic3.jpg',
         imageAlt: 'Project 3 screenshot',
         tags: ['C++'],
         link: 'https://github.com/AOOD-FinalProject/Advanced-Bank-Management-System',
@@ -374,7 +451,7 @@ const projectData = [
     {
         title: 'Mobile App - Magic ToDo Ball',
         description: 'A fun and interactive to-do list app that uses a Magic 8 Ball concept to randomly choose tasks. Developed in Android Studio with Java to make task selection more engaging and less overwhelming.',
-        image: 'pic2.jpg',
+        image: 'image/pic2.jpg',
         imageAlt: 'Placeholder project screenshot',
         tags: ['Java', 'HTML', 'CSS'],
         link: 'https://github.com/Lehoa02/Magic_ToDo_Ball',
@@ -384,7 +461,7 @@ const projectData = [
     {
         title: 'Space Invaders Game',
         description: 'A 2D arcade-style Space Invaders game built with Java and JavaFX. Implements player movement, enemy patterns, collision detection, and real-time score updates.',
-        image: 'pic1.jpg',
+        image: 'image/pic1.jpg',
         imageAlt: 'Placeholder project screenshot',
         tags: ['TypeScript', 'UI', 'Motion'],
         link: 'https://github.com/Lehoa02/SpaceInveders',
@@ -392,6 +469,11 @@ const projectData = [
         demoLink: null,
     },
 ];
+
+const mobileProjectLimit = 3;
+const mobileProjectsQuery = window.matchMedia('(max-width: 700px)');
+let projectsExpanded = false;
+let projectsControlsInitialized = false;
 
 function createProjectAction({ href, label, ariaLabel, iconClass, variant = 'demo', disabled = false }) {
     const action = href && !disabled ? document.createElement('a') : document.createElement('button');
@@ -479,42 +561,88 @@ function createProjectCard(project) {
     return card;
 }
 
+function getVisibleProjects() {
+    if (!mobileProjectsQuery.matches) {
+        return projectData;
+    }
+
+    return projectsExpanded ? projectData : projectData.slice(0, mobileProjectLimit);
+}
+
+function syncProjectsToggle(toggleButton) {
+    if (!toggleButton) {
+        return;
+    }
+
+    const shouldShowToggle = mobileProjectsQuery.matches && projectData.length > mobileProjectLimit;
+
+    toggleButton.hidden = !shouldShowToggle;
+    toggleButton.setAttribute('aria-expanded', String(projectsExpanded));
+
+    if (!shouldShowToggle) {
+        toggleButton.textContent = 'Show more projects';
+        return;
+    }
+
+    toggleButton.textContent = projectsExpanded ? 'Show fewer projects' : 'Show more projects';
+}
+
 function renderProjects() {
     const projectsGrid = document.getElementById('projects-grid');
     const previousButton = document.getElementById('projects-prev');
     const nextButton = document.getElementById('projects-next');
+    const toggleButton = document.getElementById('projects-toggle');
 
     if (!projectsGrid) {
         return;
     }
 
-    projectsGrid.replaceChildren(...projectData.map(createProjectCard));
+    projectsGrid.replaceChildren(...getVisibleProjects().map(createProjectCard));
+    syncProjectsToggle(toggleButton);
 
-    if (!previousButton || !nextButton) {
-        return;
+    if (!projectsControlsInitialized) {
+        const updateButtonState = () => {
+            if (!previousButton || !nextButton) {
+                return;
+            }
+
+            const atStart = projectsGrid.scrollLeft <= 8;
+            const atEnd = projectsGrid.scrollLeft + projectsGrid.clientWidth >= projectsGrid.scrollWidth - 8;
+
+            previousButton.disabled = atStart;
+            nextButton.disabled = atEnd;
+        };
+
+        const scrollStep = () => Math.max(projectsGrid.clientWidth * 0.9, 320);
+
+        if (previousButton && nextButton) {
+            previousButton.addEventListener('click', () => {
+                projectsGrid.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
+            });
+
+            nextButton.addEventListener('click', () => {
+                projectsGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' });
+            });
+
+            projectsGrid.addEventListener('scroll', updateButtonState, { passive: true });
+            window.addEventListener('resize', updateButtonState, { passive: true });
+            updateButtonState();
+        }
+
+        if (toggleButton) {
+            toggleButton.addEventListener('click', () => {
+                projectsExpanded = !projectsExpanded;
+                renderProjects();
+            });
+        }
+
+        mobileProjectsQuery.addEventListener('change', () => {
+            projectsExpanded = false;
+            renderProjects();
+        });
+
+        projectsControlsInitialized = true;
     }
-
-    const updateButtonState = () => {
-        const atStart = projectsGrid.scrollLeft <= 8;
-        const atEnd = projectsGrid.scrollLeft + projectsGrid.clientWidth >= projectsGrid.scrollWidth - 8;
-
-        previousButton.disabled = atStart;
-        nextButton.disabled = atEnd;
-    };
-
-    const scrollStep = () => Math.max(projectsGrid.clientWidth * 0.9, 320);
-
-    previousButton.addEventListener('click', () => {
-        projectsGrid.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
-    });
-
-    nextButton.addEventListener('click', () => {
-        projectsGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' });
-    });
-
-    projectsGrid.addEventListener('scroll', updateButtonState, { passive: true });
-    window.addEventListener('resize', updateButtonState, { passive: true });
-    updateButtonState();
 }
 
 if (document.readyState === 'loading') {

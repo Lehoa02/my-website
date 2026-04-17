@@ -26,16 +26,20 @@
                     <i class="bx bx-sun"></i>
                 </span>
             </label>
+            <button type="button" id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+                <i class="bx bx-menu" aria-hidden="true"></i>
+            </button>
         </div>
-        <nav class="navbar">
+        <nav class="navbar" id="site-nav">
             <a href="#home" class="active">Home</a>
             <a href="#about-me">About me</a>
-            <a href="#news">News</a>
+            <!-- <a href="#news">News</a> -->
             <a href="#education">Education</a>
             <a href="#experience">Experience</a>
             <a href="#projects">Projects</a>
         </nav>
     </header>
+    <div class="nav-backdrop" id="nav-backdrop" hidden aria-hidden="true"></div>
 
     <section id="home">
         <div class="hero-shell">
@@ -58,7 +62,7 @@
             <div class="hero-visual">
                 <div class="hero-portrait-stage">
                     <div class="hero-portrait-frame">
-                        <img src="p3.jpeg" alt="Portrait of Anastasiia Lehova" />
+                        <img src="image/p3.jpeg" alt="Portrait of Anastasiia Lehova" />
                     </div>
                     <a class="hero-note" href="Lehova_Resume.pdf" target="_blank" rel="noreferrer" download="Anastasiia_Lehova_Resume.pdf" aria-label="Open or download my resume PDF">
                         <span class="hero-note-label">Resume</span>
@@ -360,6 +364,9 @@
                 </div>
             </div>
             <div class="projects-grid" id="projects-grid" aria-label="Projects portfolio"></div>
+            <button type="button" id="projects-toggle" class="projects-toggle" hidden aria-expanded="false" aria-controls="projects-grid">
+                Show more projects
+            </button>
         </div>
     </section>
 
