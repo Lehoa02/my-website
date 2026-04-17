@@ -4,337 +4,384 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" rel="stylesheet" />
 </head>
-<body>
-
-
+<body data-theme="dark">
     <header>
+        <div class="header-actions">
+            <label class="theme-switch" for="theme-toggle">
+                <span class="theme-switch-icon theme-switch-icon-dark" aria-hidden="true">
+                    <i class="bx bx-moon"></i>
+                </span>
+                <input id="theme-toggle" class="theme-switch-input" type="checkbox" role="switch" aria-label="Toggle light mode" />
+                <span class="theme-switch-track" aria-hidden="true">
+                    <span class="theme-switch-thumb"></span>
+                </span>
+                <span class="theme-switch-icon theme-switch-icon-light" aria-hidden="true">
+                    <i class="bx bx-sun"></i>
+                </span>
+            </label>
+        </div>
         <nav class="navbar">
-            <button onclick="window.location.href='#contact'">Get in touch</button>
             <a href="#home" class="active">Home</a>
-            <a href="#about">About</a>
+            <a href="#about-me">About me</a>
+            <a href="#news">News</a>
+            <a href="#education">Education</a>
             <a href="#experience">Experience</a>
             <a href="#projects">Projects</a>
         </nav>
     </header>
 
     <section id="home">
-        <div class="heade">
-            <h1>
-                <span class="shimmer-line" >Hi, my name is<br>Anastas<span class="jump-i">i</span><span class="jump-i">i</span>a</span>
-            </h1>
-            <p class="fade-text">Software Engineer</p>
-        </div>
-        
-    </section>
-
-    
-   
-    <section id="about">
-        <div class="about-container">
-            <h2>About Me</h2>
-            <p class="slide-in-bottom"> I recently graduated from the University of Wisconsin–Green Bay with a B.S. in Computer Science and a minor in Mathematics. I also have a B.A. in Translation (English, Russian, Ukrainian, and French) from Priazovskiy State University in Ukraine.</p>
-            <div class="skills-slider-wrapper">
-                <button class="slider-btn left-btn">&lt;</button>
-                <div class="skills-grid">
-                    <div class="skill-box">
-                        <h3>HTML/CSS/JS</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-html" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-73"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="skill-box">
-                        <h3>Python</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-python" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-80"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="skill-box">
-                        <h3>SQL</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-sql" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-90"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="skill-box hidden">
-                        <h3>Unreal Engine</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-unreal" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-85"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="skill-box">
-                        <h3>C/C++</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-cpp" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-70"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="skill-box ">
-                        <h3>Java</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-java" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-82"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="skill-box ">
-                        <h3>AWS</h3>
-                        <div class="skill">
-                            <div class="outer">
-                                <div class="inner">
-                                    <div id="number-aws" class="number"></div>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
-                                <defs>
-                                    <linearGradient id="GradientColor">
-                                        <stop offset="0%" stop-color="#e91e63"/>
-                                        <stop offset="100%" stop-color="#673ab7"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="80" cy="80" r="70" stroke-linecap="round" class="circle-75"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    
-
+        <div class="hero-shell">
+            <div class="hero-copy">
+                <h1>
+                    <span class="hero-title">Hi, I am Anastasiia</span>
+                </h1>
+                <p class="hero-role"><span id="typed-text" data-texts="|Software Engineer|Data Scientist|Full-Stack Developer"></span></p>
+                <p class="hero-description">Building efficient systems learning from real-world behavior, and continuously improving performance and reliability.</p>
+                <div class="hero-badges" aria-label="Core focus areas">
+                    <span>Backend Systems</span>
+                    <span>Data & APIs</span>
+                    <span>HCI Research</span>
                 </div>
-                <button class="slider-btn right-btn">&gt;</button>
+                <div class="hero-actions">
+                    <a href="#contact" class="navbar-contact-link hero-cta">Get in touch</a>
+                    <a href="#projects" class="hero-secondary-link"><i class="bx bx-show" aria-hidden="true"></i><span>See work</span></a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-portrait-stage">
+                    <div class="hero-portrait-frame">
+                        <img src="p3.jpeg" alt="Portrait of Anastasiia Lehova" />
+                    </div>
+                    <a class="hero-note" href="Lehova_Resume.pdf" target="_blank" rel="noreferrer" download="Anastasiia_Lehova_Resume.pdf" aria-label="Open or download my resume PDF">
+                        <span class="hero-note-label">Resume</span>
+                        <span class="hero-note-content">
+                            <i class="bx bx-download" aria-hidden="true"></i>
+                            <strong>Open or download my resume PDF.</strong>
+                        </span>
+                    </a> 
+                    <div class="hero-links" aria-label="Social links">
+                        <a href="https://github.com/Lehoa02?tab=repositories" target="_blank" rel="noreferrer" aria-label="GitHub">
+                            <i class="bx bxl-github" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/anastasiia-lehova" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                            <i class="bx bxl-linkedin" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://scholar.google.com" target="_blank" rel="noreferrer" aria-label="Google Scholar">
+                            <i class="ai ai-google-scholar" aria-hidden="true"></i>
+                        </a>
+                      
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    
-    
-     
-    <section id="experience">  
-        <div class="timeline-wrapper">
-            <div class="timeline-row">
-    
-                <div class="timeline-col">
-                    <h2 class="heading">
-                        <i class="bx bxs-graduation"></i>
-                        Education
-                    </h2>
-    
-                    <div class="timeline-box">
-                        <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                               January 2022 - December 2025
-                            </div>
-                            <h3>University of Wisconsin Green Bay</h3>
-                            <p>Major: Computer Science(emphasis: Software Engineer)<br>Minor: Mathematics</p>
+
+    <section id="about-me">
+        <div class="about-me-shell">
+            <div class="about-me-copy">
+                <span class="section-kicker">About me</span>
+                     <h2>
+                         <span class="about-me-quote" tabindex="0" data-translation="Through hardships to the stars" aria-label="Per aspera ad astra. Translation: Through hardships to the stars.">Per aspera ad astra</span>
+                     </h2>
+                <p>
+                   I recently graduated from the University of Wisconsin–Green Bay with a B.S. in Computer Science and a minor in Mathematics. I also hold a B.A. in Translation from Priazovskiy State University in Ukraine, with a focus on English, Russian, Ukrainian, and French. 
+                   
+                </p>
+                <p>
+                   My background across both technical and language-focused fields has influenced the way I think about building systems: with structure, clarity, and attention to how people interact with them. Outside of coding, I enjoy playing chess, reading books, and sketching.
+                </p>
+                <!-- <div class="about-me-tags" aria-label="About me highlights">
+                    <span>Interface design</span>
+                    <span>Full-stack thinking</span>
+                    <span>Clean UX</span>
+                </div> -->
+            </div>
+            <div class="about-me-skills">
+                <span class="section-kicker">Skills</span>
+                <div class="skills-grid" aria-label="Skills overview">
+                    <article class="skill-card">
+                        <h3>Programming</h3>
+                        <div class="skill-chip-list">
+                            <span>Python</span>
+                            <span>Java</span>
+                            <span>C/C++</span>
+                            <span>React</span>
+                            <span>REST APIs</span>
+                            <span>Tailwind CSS</span>
                         </div>
-                        <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                                September 2020 - May 2024
-                            </div>
-                            <h3>Priazovskiy State Technical University</h3>
-                            <p>Major: Translation(English, Russian, Ukrainian)</p>
+                    </article>
+                    <article class="skill-card">
+                        <h3>Data Science</h3>
+                        <div class="skill-chip-list">
+                            <span>SQL</span>
+                            <span>DynamoDB</span>
+                            <span>R</span>
+                            <span>AWS</span>
+                            <span>AI/ML</span>
+                            <span>MongoDB</span>
                         </div>
-                    </div>
-    
+                    </article>
+                    <article class="skill-card">
+                        <h3>Tools</h3>
+                        <div class="skill-chip-list">
+                            <span>GitHub</span>
+                            <span>Figma</span>
+                            <span>Debugging</span>
+                            <span>Docker</span>
+                            <span>QA Testing</span>
+                        </div>
+                    </article>
                 </div>
-                <div class="timeline-col">
-                    <h2 class="heading">
-                        <i class="bx bxs-briefcase-alt-2"></i>
-                        Experience
-                    </h2>
-    
-                    <div class="timeline-box">
-                        <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                                August 2025 - Currently
+            </div>
+        </div>
+    </section>
+
+   <!--  <section id="news" class="news-section">
+        <div class="news-shell">
+            <span class="section-kicker news-kicker">News</span>
+            <div class="news-header">
+                <h2>Recent updates</h2>
+                <p>A short date-first feed of what I am working on right now.</p>
+            </div>
+
+            <div class="news-list" id="news-list" role="list" aria-label="Recent updates">
+                <article class="news-item" role="listitem">
+                    <div class="news-date">April 2026</div>
+                    <div class="news-content">
+                        <h3>Refreshing the site with clearer sections</h3>
+                        <p>Tightening the portfolio structure so the most important information is easier to scan on desktop and mobile.</p>
+                    </div>
+                </article>
+
+                <article class="news-item" role="listitem">
+                    <div class="news-date">Current</div>
+                    <div class="news-content">
+                        <h3>Balancing software work with HCI and data projects</h3>
+                        <p>Sharing what I am learning, testing, or building before it becomes a larger project write-up.</p>
+                    </div>
+                </article>
+
+                <article class="news-item" role="listitem">
+                    <div class="news-date">Soon</div>
+                    <div class="news-content">
+                        <h3>Planning short write-ups for selected projects</h3>
+                        <p>Keeping the feed compact so visitors can see recent changes at a glance.</p>
+                    </div>
+                </article>
+
+                <article class="news-item" role="listitem">
+                    <div class="news-date">April 2026</div>
+                    <div class="news-content">
+                        <h3>Sketching a lighter project gallery for the homepage</h3>
+                        <p>Trying a simpler visual rhythm so featured work feels easier to browse without adding extra clutter.</p>
+                    </div>
+                </article>
+
+                <article class="news-item" role="listitem">
+                    <div class="news-date">This month</div>
+                    <div class="news-content">
+                        <h3>Preparing a few short notes for ongoing experiments</h3>
+                        <p>Turning smaller tests into quick updates instead of waiting for a full project case study.</p>
+                    </div>
+                </article>
+
+                <article class="news-item" role="listitem">
+                    <div class="news-date">Later in April</div>
+                    <div class="news-content">
+                        <h3>Polishing spacing and hierarchy across the portfolio</h3>
+                        <p>Making sure the overall site stays calm, readable, and consistent as more sections get added.</p>
+                    </div>
+                </article>
+            </div>
+
+            <button class="news-toggle" type="button" aria-expanded="false" aria-controls="news-list">
+                View all updates
+            </button>
+        </div>
+    </section> -->
+
+    <section id="education" class="timeline-section">
+        <div class="timeline-shell">
+            <h2 class="heading">
+                My Education
+            </h2>
+            <div class="timeline-wrapper">
+                <div class="timeline-row">
+                    <div class="timeline-col">
+                        <div class="timeline-box">
+                            <div class="content-box">
+                                <div class="date">
+                                    <i class="bx bx-calendar"></i>
+                                    January 2022 - December 2025
+                                </div>
+                                <h3>University of Wisconsin Green Bay</h3>
+                                <p><b>B.S. in Computer Science with a minor in Mathematics.</b></p>
+                                <ul class="timeline-points">
+                                    <li>GPA: <b>3.5/4.0</b></li>
+                                    <li>Member of the Computer Science, Robotics, Chess Clubs</li>
+                                    <li>Dean`s List Honoree</li>
+                                    <li>Recipient of the Several Academic Awards</li>
+                                </ul>
                             </div>
-                            <h3>Schreiber Foods</h3>
-                            <p>Software Engineer Intern</p>
-                        </div>
-                         <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                                May 2025 - August 2025
+                            <div class="content-box">
+                                <div class="date">
+                                    <i class="bx bx-calendar"></i>
+                                    September 2020 - May 2024
+                                </div>
+                                <h3>Priazovskiy State Technical University</h3>
+                                <p><b>B.A. in Translation Studies.</b></p>
+                                <ul class="timeline-points">
+                                    <li>English, French, Russian, and Ukrainian.</li>
+                                    <li>Global Undergraduate Exchange Program Alumni</li>
+                                    <li>Academic Scholarship Recipient</li>
+                                </ul>
                             </div>
-                            <h3>Schreiber Foods</h3>
-                            <p>Controls Engineer Intern</p>
-                        </div>
-                        <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                                August 2024 - April 2025
-                            </div>
-                            <h3>Brown County</h3>
-                            <p>Software Engineer</p>
-                        </div>
-                        <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                                September 2023 - January 2025
-                            </div>
-                            <h3>Green Bay IT(UWGB)</h3>
-                            <p>Student Dispatch</p>
-                        </div>
-                        <div class="content-box">
-                            <div class="date">
-                                <i class="bx bx-calendar"></i>
-                                May 2024 - April 2025
-                            </div>
-                            <h3>Reserch Project(UWGB)</h3>
-                            <p>Robotics, Deep Learning</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
+    <section id="experience" class="timeline-section">
+        <div class="timeline-shell">
+            <h2 class="heading">
+                My Experience
+            </h2>
+            <div class="timeline-wrapper">
+                <div class="timeline-row">
+                    <div class="timeline-col">
+                        <div class="timeline-box">
+                            <div class="content-box">
+                                <div class="date">
+                                    <i class="bx bx-calendar"></i>
+                                    August 2025 - Currently
+                                </div>
+                                <h3>Schreiber Foods</h3>
+                                <p><b>Software Engineer Intern</b></p>
+                                <ul class="timeline-tags" aria-label="Skills used in this role">
+                                    <li>Python</li>
+                                    <li>SQL</li>
+                                    <li>QA Testing</li>
+                                    <li>AWS</li>
+                                    <li>APIs</li>
+                                </ul>
+                               
+                                <ul class="timeline-points">
+                                    <li>Built backend APIs in Python and improved system reliability through debugging and feature enhancements.</li>
+                                    <li>Optimized SQL queries and implemented AWS workflows for efficient data processing.</li>
+
+                                </ul>
+                            </div>
+                            <div class="content-box">
+                                <div class="date">
+                                    <i class="bx bx-calendar"></i>
+                                    May 2025 - August 2025
+                                </div>
+                                <h3>Schreiber Foods</h3>
+                                <p><b>Controls Engineer Intern</b></p>
+                                <ul class="timeline-tags" aria-label="Skills used in this role">
+                                    <li>Python</li>
+                                    <li>SCADA</li>
+                                    <li>Ignition</li>
+                                    <li>SQL</li>
+                                    <li>Automation</li>
+                                </ul>
+                                
+                                <ul class="timeline-points">
+                                    <li>Designed SCADA dashboards and automated workflows using Python to support real-time industrial monitoring.</li>
+                                    <li>Optimized SQL queries and extended system functionality to improve data reliability and operational efficiency.</li>
+                                </ul>
+                            </div>
+                            <div class="content-box">
+                                <div class="date">
+                                    <i class="bx bx-calendar"></i>
+                                    August 2024 - April 2025
+                                </div>
+                                <h3>Brown County</h3>
+                                <p><b>Undergraduate Research Assistant</b></p>
+                                <ul class="timeline-tags" aria-label="Skills used in this role">
+                                    <li>Research</li>
+                                    <li>Data Modeling</li>
+                                    <li>ERP</li>
+                                    <li>Robotics</li>
+                                </ul>
+                            
+                                <ul class="timeline-points">
+                                    <li>Conducted research on system workflows and human–robot interaction, designing data models and analyzing operational processes.</li>
+                                    <li>Built an ERP system and programmed interactive robot behaviors to study real-world system performance and user interaction.</li>
+                                </ul>
+                            </div>
+                            <div class="content-box">
+                                <div class="date">
+                                    <i class="bx bx-calendar"></i>
+                                    September 2023 - January 2025
+                                </div>
+                                <h3>Green Bay IT (UWGB)</h3>
+                                <p><b>Student Dispatch</b></p>
+                                <ul class="timeline-tags" aria-label="Skills used in this role">
+                                    <li>IT Support</li>
+                                    <li>Troubleshooting</li>
+                                    <li>Hardware</li>
+                                    <li>Security</li>
+                                </ul>
+                                <ul class="timeline-points">
+                                    <li>Ensured secure and reliable environments through troubleshooting, system setup, and hardware lifecycle support.</li>
+                                    <li>Supported campus IT operations by configuring hardware, managing user access, and maintaining systems.</li>
+                                </ul>
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="projects">
         <div class="projects-container">
-            <h2>My Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="pic1.jpg" alt="Project 1 Image">
-                    </div>
-                    <h4>Project 1</h4>
-                    <p>A simple 2D space shooter game inspired by the classic Space Invaders game.</p>
-                    <div class="project-languages">
-                        <span>Java</span>
-                    </div>
-                    <a href="https://github.com/Lehoa02/SpaceInveders" class="project-btn">
-    <i class="bx bx-right-arrow-alt"></i>
-</a>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="pic2.jpg" alt="Project 2 Image">
-                    </div>
-                    <h4>Project 2</h4>
-                    <p>Magic To-Do Ball is a fun and interactive to-do list application for Android.</p>
-                    <div class="project-languages">
-                        <span data-tech="Java">Java</span>
-                        <span>HTML</span>
-                        <span>CSS</span>
-                        
-                        
-                    </div>
-                    <a href="https://github.com/Lehoa02/Magic_ToDo_Ball/tree/master" class="project-btn"><i class="bx bx-right-arrow-alt"></i></a> 
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="pic3.jpg" alt="Project 3 Image">
-                    </div>
-                    <h4>Project 3</h4>
-                    <p>A comprehensive banking solution that automates core banking operations.</p>
-                    <div class="project-languages">
-                        <span>C++</span>
-                       
-                    </div>
-                    <a href="https://github.com/AOOD-FinalProject/Advanced-Bank-Management-System" class="project-btn"><i class="bx bx-right-arrow-alt"></i></a> 
+            <div class="projects-header">
+                <h2>My Projects</h2>
+                <div class="projects-controls" aria-label="Project scroller controls">
+                    <button type="button" id="projects-prev" class="projects-arrow" aria-label="Scroll projects left">
+                        <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" id="projects-next" class="projects-arrow" aria-label="Scroll projects right">
+                        <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
+            <div class="projects-grid" id="projects-grid" aria-label="Projects portfolio"></div>
         </div>
     </section>
 
     <footer id="contact">
-        
-       
+        <div class="footer-container">
             <div class="footer-left">
                 <div class="footer-quote-section">
                     <p class="footer-quote">"Thank you for visiting my platform! I look forward to the opportunity to collaborate and work together!"</p>
                     <ul class="social-icons">
                         <li><a href="https://github.com/Lehoa02?tab=repositories" target="_blank"><i class="bx bxl-github"></i></a></li>
                         <li><a href="https://www.linkedin.com/in/anastasiia-lehova" target="_blank"><i class="bx bxl-linkedin"></i></a></li>
-                        <li><a href="https://www.instagram.com/n.legova?igsh=aGtpd2toOGtncXhy" target="_blank"><i class="bx bxl-instagram"></i></a></li>
-                        <li><a href="https://snapchat.com/t/gVXIwzdD" target="_blank"><i class="bx bxl-snapchat"></i></a></li>
-                        <li><a href="https://www.facebook.com/anastasiia.lehova/" target="_blank"><i class="bx bxl-facebook"></i></a></li>
-                    </ul>
+                        <li><a href="https://scholar.google.com" target="_blank" rel="noreferrer" aria-label="Google Scholar">
+                            <i class="ai ai-google-scholar" aria-hidden="true"></i>
+                        </a></li>
                 </div>
-            
+            </div>
             <div class="footer-right">
                 <div class="header-icons">
                     <h3>Get in Touch</h3>
                     <div class="icons">
-                        <i class="bx bx-code-alt"></i> <!-- Example icon -->
-                        <i class="bx bx-planet"></i>    <!-- Example icon -->
+                        <i class="bx bx-code-alt"></i>
+                        <i class="bx bx-planet"></i>
                     </div>
                 </div>
                 <form id="contact-form" action="https://formspree.io/f/mzzbpgra" method="POST">
@@ -350,8 +397,8 @@
 
     <div class="glassy-overlay"></div>
     <canvas></canvas>
+    <div class="theme-transition-wash" aria-hidden="true"></div>
 
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

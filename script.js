@@ -1,3 +1,175 @@
+const themePalettes = {
+    dark: {
+        gradientStops: [
+            "rgba(10, 10, 10, 1)",
+            "rgba(30, 30, 60, 1)",
+            "rgba(5, 5, 20, 1)",
+        ],
+        blobStart: { r: 160, g: 32, b: 240 },
+        blobEnd: { r: 240, g: 60, b: 130 },
+        shadow: "rgba(0, 0, 0, 0.2)",
+    },
+    light: {
+        gradientStops: [
+            "rgba(250, 249, 255, 1)",
+            "rgba(238, 240, 255, 1)",
+            "rgba(252, 248, 255, 1)",
+        ],
+        blobStart: { r: 179, g: 148, b: 255 },
+        blobEnd: { r: 139, g: 92, b: 246 },
+        shadow: "rgba(15, 23, 42, 0.08)",
+    },
+};
+
+const themeTransitionDuration = 720;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let themeTransition = null;
+let themeTransitionTimer = null;
+
+function parseRgbaColor(color) {
+    const match = color.match(/rgba?\(([^)]+)\)/);
+
+    if (!match) {
+        return { r: 255, g: 255, b: 255, a: 1 };
+    }
+
+    const parts = match[1].split(",").map(part => part.trim());
+    const [r, g, b] = parts.slice(0, 3).map(Number);
+    const a = parts.length > 3 ? Number(parts[3]) : 1;
+
+    return { r, g, b, a };
+}
+
+function mixNumber(start, end, amount) {
+    return start + (end - start) * amount;
+}
+
+function mixColor(startColor, endColor, amount) {
+    return {
+        r: Math.round(mixNumber(startColor.r, endColor.r, amount)),
+        g: Math.round(mixNumber(startColor.g, endColor.g, amount)),
+        b: Math.round(mixNumber(startColor.b, endColor.b, amount)),
+        a: mixNumber(startColor.a ?? 1, endColor.a ?? 1, amount),
+    };
+}
+
+function colorToRgba(color) {
+    return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a.toFixed(3)})`;
+}
+
+function easeInOutCubic(amount) {
+    return amount < 0.5 ? 4 * amount * amount * amount : 1 - Math.pow(-2 * amount + 2, 3) / 2;
+}
+
+function blendPalette(fromPalette, toPalette, amount) {
+    const gradientStops = fromPalette.gradientStops.map((stop, index) => colorToRgba(mixColor(parseRgbaColor(stop), parseRgbaColor(toPalette.gradientStops[index]), amount)));
+
+    return {
+        gradientStops,
+        blobStart: mixColor(fromPalette.blobStart, toPalette.blobStart, amount),
+        blobEnd: mixColor(fromPalette.blobEnd, toPalette.blobEnd, amount),
+        shadow: colorToRgba(mixColor(parseRgbaColor(fromPalette.shadow), parseRgbaColor(toPalette.shadow), amount)),
+    };
+}
+
+function getRenderedPalette(now = performance.now()) {
+    if (!themeTransition) {
+        return themePalettes[currentTheme];
+    }
+
+    const elapsed = now - themeTransition.startedAt;
+    const progress = Math.min(elapsed / themeTransition.duration, 1);
+
+    if (progress >= 1) {
+        themeTransition = null;
+        return themePalettes[currentTheme];
+    }
+
+    return blendPalette(themePalettes[themeTransition.fromTheme], themePalettes[themeTransition.toTheme], easeInOutCubic(progress));
+}
+
+function triggerThemeTransition(previousTheme, nextTheme) {
+    if (prefersReducedMotion) {
+        return;
+    }
+
+    themeTransition = {
+        fromTheme: previousTheme,
+        toTheme: nextTheme,
+        startedAt: performance.now(),
+        duration: themeTransitionDuration,
+    };
+
+    document.body.classList.remove("theme-transitioning");
+    void document.body.offsetWidth;
+    document.body.classList.add("theme-transitioning");
+
+    if (themeTransitionTimer) {
+        window.clearTimeout(themeTransitionTimer);
+    }
+
+    themeTransitionTimer = window.setTimeout(() => {
+        document.body.classList.remove("theme-transitioning");
+        themeTransition = null;
+    }, themeTransitionDuration);
+}
+
+let currentTheme = "dark";
+
+try {
+    const storedTheme = localStorage.getItem("portfolio-theme");
+    if (storedTheme === "light" || storedTheme === "dark") {
+        currentTheme = storedTheme;
+    }
+} catch (error) {
+    console.warn("Theme preference could not be loaded.", error);
+}
+
+document.body.dataset.theme = currentTheme;
+
+const themeToggle = document.getElementById("theme-toggle");
+
+function syncThemeToggle(theme) {
+    if (!themeToggle) {
+        return;
+    }
+
+    const isLight = theme === "light";
+    themeToggle.checked = isLight;
+    themeToggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+}
+
+function applyTheme(theme, persist = true) {
+    if (theme === currentTheme) {
+        syncThemeToggle(theme);
+        return;
+    }
+
+    const previousTheme = currentTheme;
+    currentTheme = theme;
+    document.body.dataset.theme = theme;
+
+    if (persist) {
+        try {
+            localStorage.setItem("portfolio-theme", theme);
+        } catch (error) {
+            console.warn("Theme preference could not be saved.", error);
+        }
+    }
+
+    syncThemeToggle(theme);
+    triggerThemeTransition(previousTheme, theme);
+    drawGradientBackground();
+}
+
+syncThemeToggle(currentTheme);
+
+if (themeToggle) {
+    themeToggle.addEventListener("change", () => {
+        applyTheme(themeToggle.checked ? "light" : "dark");
+    });
+}
+
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -14,11 +186,11 @@ function setupCanvas() {
     drawGradientBackground();
 }
 
-function drawGradientBackground() {
+function drawGradientBackground(palette = getRenderedPalette()) {
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    gradient.addColorStop(0, "rgba(10, 10, 10, 1)");
-    gradient.addColorStop(0.5, "rgba(30, 30, 60, 1)");
-    gradient.addColorStop(1, "rgba(5, 5, 20, 1)");
+    gradient.addColorStop(0, palette.gradientStops[0]);
+    gradient.addColorStop(0.5, palette.gradientStops[1]);
+    gradient.addColorStop(1, palette.gradientStops[2]);
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -41,7 +213,8 @@ function initBlobs() {
 }
 
 function animateBlobs() {
-    drawGradientBackground();
+    const palette = getRenderedPalette();
+    drawGradientBackground(palette);
     blobs.forEach(blob => {
         blob.x += blob.dx;
         blob.y += blob.dy;
@@ -59,26 +232,26 @@ function animateBlobs() {
         }
 
         // Update blob color based on position
-        updateBlobColor(blob);
+        updateBlobColor(blob, palette);
 
-        drawBlob(blob);
+        drawBlob(blob, palette);
     });
     requestAnimationFrame(animateBlobs);
 }
 
-function updateBlobColor(blob) {
+function updateBlobColor(blob, palette = getRenderedPalette()) {
     const xFactor = blob.x / canvas.width;
     const yFactor = blob.y / canvas.height;
 
-    const r = Math.floor(160 * (1 - xFactor) + 240 * xFactor);
-    const g = Math.floor(32 * (1 - yFactor) + 60 * yFactor);
-    const b = Math.floor(240 * (1 - xFactor) + 130 * xFactor);
+    const r = Math.floor(palette.blobStart.r * (1 - xFactor) + palette.blobEnd.r * xFactor);
+    const g = Math.floor(palette.blobStart.g * (1 - yFactor) + palette.blobEnd.g * yFactor);
+    const b = Math.floor(palette.blobStart.b * (1 - xFactor) + palette.blobEnd.b * xFactor);
 
     blob.color = `rgba(${r}, ${g}, ${b}, 1)`;
     blob.colorTransparent = `rgba(${r}, ${g}, ${b}, 0.7)`;
 }
 
-function drawBlob(blob) {
+function drawBlob(blob, palette = getRenderedPalette()) {
     const gradient = ctx.createRadialGradient(blob.x, blob.y, blob.radius * 0.1, blob.x, blob.y, blob.radius);
     gradient.addColorStop(0, blob.color);
     gradient.addColorStop(0.7, blob.colorTransparent);
@@ -90,7 +263,7 @@ function drawBlob(blob) {
     ctx.translate(-blob.x, -blob.y);
 
     // Draw shadow
-    ctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+    ctx.fillStyle = palette.shadow;
     ctx.beginPath();
     ctx.arc(blob.x + 10, blob.y + 10, blob.radius, 0, 2 * Math.PI);
     ctx.fill();
@@ -136,107 +309,230 @@ document.querySelectorAll('header nav a').forEach(anchor => {
     });
 })
 
+const projectData = [
+    {
+        title: 'ExpenseTracker',
+        description: 'A full-stack expense tracking application designed to help users manage spending, analyze financial patterns, and stay on budget, featuring real-time dashboards, recurring transactions, and AI-powered insights.',
+        image: 'expense-tracker.png',
+        imageAlt: 'ExpenseTracker screenshot',
+        tags: ['React', 'JavaScript', 'Tailwind CSS', 'Node.js', 'JWT', 'MongoDB'],
+        link: 'https://github.com/Lehoa02/ExpenseTracker',
+        linkLabel: 'Open ExpenseTracker placeholder link',
+        demoLink: 'https://expense-tracker-beta-eosin.vercel.app/login',
+    },
+    {
+        title: 'Distributed Audio Processing System',
+        description: 'A distributed system for parallel audio processing. The application handles asynchronous file uploads, processes audio data concurrently, and extracts features such as spectral centroid, bandwidth, and loudness.',
+        image: 'audio2.png',
+        imageAlt: 'Audio Processing System screenshot',
+        tags: ['Python', 'Redis', 'Celery', 'Audio Processing', 'JavaScript', 'Flask'],
+        link: 'https://github.com/Lehoa02/Distributed-Audio-Processing-System',
+        linkLabel: 'Open Distributed Audio Processing System on GitHub',
+        demoLink: null,
+    },
+    {
+        title: 'Pirate Shooter 3D Game',
+        description: 'A 3D action game where players take on the role of a pirate captain, engaging in naval battles and treasure hunts.',
+        image: 'pirate.png',
+        imageAlt: 'Pirate Shooter 3D Game screenshot',
+        tags: ['C++', 'Unreal Engine'],
+        link: 'https://github.com/Lehoa02/Pirate-Shooter-3D-Game',
+        linkLabel: 'Open Project 3 on GitHub',
+        demoLink: null,
+    },
+    {
+        title: 'Resume AI Matcher',
+        description: 'A comprehensive banking solution that automates core banking operations. The project explores data handling, transaction flow, and a cleaner way to manage repeated financial tasks.',
+        image: 'ai.png',
+        imageAlt: 'Project 3 screenshot',
+        tags: ['Jupyter Notebook', 'Python', 'Pandas', 'Scikit-learn'],
+        link: 'https://github.com/Lehoa02/Resume_AI',
+        linkLabel: 'Open Project 3 on GitHub',
+        demoLink: null,
+    },
+    {
+        title: 'Celery Calculator',
+        description: 'A simple calculator application built with Celery for distributed task processing.',
+        image: 'image.png',
+        imageAlt: 'Celery Calculator screenshot',
+        tags: ['Python', 'Celery', 'Flask'],
+        link: 'https://github.com/Lehoa02/CeletyCalculator',
+        linkLabel: 'Open Celery Calculator on GitHub',
+        demoLink: null,
+    },
+    {
+        title: 'Advanced Bank Management System',
+        description: 'A comprehensive banking solution that automates core banking operations. The project explores data handling, transaction flow, and a cleaner way to manage repeated financial tasks.',
+        image: 'pic3.jpg',
+        imageAlt: 'Project 3 screenshot',
+        tags: ['C++'],
+        link: 'https://github.com/AOOD-FinalProject/Advanced-Bank-Management-System',
+        linkLabel: 'Open Project 3 on GitHub',
+        demoLink: null,
+    },
+    
+    {
+        title: 'Mobile App - Magic ToDo Ball',
+        description: 'Dummy project placeholder for an internal tool or research workflow. This is a good spot for a short summary of the problem, approach, and any useful features.',
+        image: 'pic2.jpg',
+        imageAlt: 'Placeholder project screenshot',
+        tags: ['Java', 'HTML', 'CSS'],
+        link: 'https://github.com/Lehoa02/Magic_ToDo_Ball',
+        linkLabel: 'Open Project 5 placeholder link',
+        demoLink: null,
+    },
+    {
+        title: 'Space Invaders Game',
+        description: 'Dummy project placeholder for a polished landing page or case study. You can replace this with a richer project summary, a result statement, or a few implementation notes.',
+        image: 'pic1.jpg',
+        imageAlt: 'Placeholder project screenshot',
+        tags: ['TypeScript', 'UI', 'Motion'],
+        link: 'https://github.com/Lehoa02/SpaceInveders',
+        linkLabel: 'Open Project 6 placeholder link',
+        demoLink: null,
+    },
+];
 
-document.addEventListener("DOMContentLoaded", function() {
-    let aboutSection = document.getElementById('about');
-    let observer;
-    let hasAnimated = false; // Flag to prevent reanimation
+function createProjectAction({ href, label, ariaLabel, iconClass, variant = 'demo', disabled = false }) {
+    const action = href && !disabled ? document.createElement('a') : document.createElement('button');
+    action.className = `project-link project-link--${variant}`;
 
-    observer = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !hasAnimated) {
-                // Start the animations
-                document.querySelector('.circle-80').style.strokeDashoffset = '144'; 
-                document.querySelector('.circle-90').style.strokeDashoffset = '85'; 
-                document.querySelector('.circle-85').style.strokeDashoffset = '130'; 
-                document.querySelector('.circle-73').style.strokeDashoffset = '180'; 
-                document.querySelector('.circle-70').style.strokeDashoffset = '198';
-                document.querySelector('.circle-75').style.strokeDashoffset = '168'; 
-                document.querySelector('.circle-82').style.strokeDashoffset = '135';
-
-                // Start the counter animation
-                startCounters();
-                
-                hasAnimated = true; // Prevent further animations
-                observer.unobserve(aboutSection); // Stop observing after first animation
-            }
-        });
-    }, { threshold: 0.5 });
-
-    observer.observe(aboutSection);
-
-    function startCounters() {
-        let pythonCounter = 0;
-        let numberUnreal = 0;
-        let javaCounter = 0;
-        let cppCounter = 0;
-        let htmlCounter = 0;
-        let sqlCounter = 0;
-        let awsCounter = 0;
-
-        let intervalPython = setInterval(() => {
-            if (pythonCounter == 80) { clearInterval(intervalPython); } 
-            else { pythonCounter += 1; document.getElementById("number-python").innerHTML = pythonCounter + "%"; }
-        }, 20);
-
-        let intervalUnreal= setInterval(() => {
-            if (numberUnreal == 85) { clearInterval(intervalUnreal); } 
-            else { numberUnreal += 1; document.getElementById("number-unreal").innerHTML = numberUnreal + "%"; }
-        }, 20);
-
-        let intervalJava = setInterval(() => {
-            if (javaCounter == 82) { clearInterval(intervalJava); } 
-            else { javaCounter += 1; document.getElementById("number-java").innerHTML = javaCounter + "%"; }
-        }, 20);
-
-        let intervalCpp = setInterval(() => {
-            if (cppCounter == 70) { clearInterval(intervalCpp); } 
-            else { cppCounter += 1; document.getElementById("number-cpp").innerHTML = cppCounter + "%"; }
-        }, 20);
-
-        let intervalHTML = setInterval(() => {
-            if (htmlCounter == 73) { clearInterval(intervalHTML); } 
-            else { htmlCounter += 1; document.getElementById("number-html").innerHTML = htmlCounter + "%"; }
-        }, 20);
-
-        let intervalSQL = setInterval(() => {
-            if (sqlCounter == 90) { clearInterval(intervalSQL); } 
-            else { sqlCounter += 1; document.getElementById("number-sql").innerHTML = sqlCounter + "%"; }
-        }, 20);
-
-        let intervalAWS = setInterval(() => {
-            if (awsCounter == 75) { clearInterval(intervalAWS); } 
-            else { awsCounter += 1; document.getElementById("number-aws").innerHTML = awsCounter + "%"; }
-        }, 20);
+    if (action.tagName === 'A') {
+        action.href = href;
+        action.target = '_blank';
+        action.rel = 'noreferrer';
+    } else {
+        action.type = 'button';
+        action.disabled = disabled;
+        action.setAttribute('aria-disabled', 'true');
     }
-});
+
+    if (ariaLabel) {
+        action.setAttribute('aria-label', ariaLabel);
+    }
+
+    const icon = document.createElement('i');
+    icon.className = iconClass;
+    icon.setAttribute('aria-hidden', 'true');
+
+    const text = document.createElement('span');
+    text.textContent = label;
+
+    action.append(icon, text);
+    return action;
+}
+
+function createProjectCard(project) {
+    const card = document.createElement('article');
+    card.className = 'project-card';
+
+    const imageWrap = document.createElement('div');
+    imageWrap.className = 'project-image';
+
+    const image = document.createElement('img');
+    image.src = project.image;
+    image.alt = project.imageAlt;
+    image.loading = 'lazy';
+    imageWrap.appendChild(image);
+
+    const title = document.createElement('h4');
+    title.textContent = project.title;
+
+    const description = document.createElement('p');
+    description.textContent = project.description;
+
+    const languages = document.createElement('div');
+    languages.className = 'project-languages';
+
+    project.tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.textContent = tag;
+        languages.appendChild(tagElement);
+    });
+
+    const actions = document.createElement('div');
+    actions.className = 'project-actions';
+
+    const githubButton = createProjectAction({
+        href: project.link,
+        label: 'Source code',
+        ariaLabel: project.linkLabel,
+        iconClass: 'bx bxl-github',
+        variant: 'code',
+    });
+
+    const liveDemoButton = createProjectAction({
+        href: project.demoLink,
+        label: 'Live demo',
+        ariaLabel: project.demoLink ? `Open ${project.title} live demo` : `${project.title} live demo coming soon`,
+        iconClass: 'bx bx-link-external',
+        variant: 'demo',
+        disabled: !project.demoLink,
+    });
+
+    actions.append(githubButton, liveDemoButton);
+
+    card.append(imageWrap, title, description, languages, actions);
+    return card;
+}
+
+function renderProjects() {
+    const projectsGrid = document.getElementById('projects-grid');
+    const previousButton = document.getElementById('projects-prev');
+    const nextButton = document.getElementById('projects-next');
+
+    if (!projectsGrid) {
+        return;
+    }
+
+    projectsGrid.replaceChildren(...projectData.map(createProjectCard));
+
+    if (!previousButton || !nextButton) {
+        return;
+    }
+
+    const updateButtonState = () => {
+        const atStart = projectsGrid.scrollLeft <= 8;
+        const atEnd = projectsGrid.scrollLeft + projectsGrid.clientWidth >= projectsGrid.scrollWidth - 8;
+
+        previousButton.disabled = atStart;
+        nextButton.disabled = atEnd;
+    };
+
+    const scrollStep = () => Math.max(projectsGrid.clientWidth * 0.9, 320);
+
+    previousButton.addEventListener('click', () => {
+        projectsGrid.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
+    });
+
+    nextButton.addEventListener('click', () => {
+        projectsGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' });
+    });
+
+    projectsGrid.addEventListener('scroll', updateButtonState, { passive: true });
+    window.addEventListener('resize', updateButtonState, { passive: true });
+    updateButtonState();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderProjects);
+} else {
+    renderProjects();
+}
+
 
 document.addEventListener("DOMContentLoaded", function() {
-    let aboutSection = document.getElementById('about');
+    let aboutSection = document.getElementById('about-me');
+
+    if (!aboutSection) {
+        return;
+    }
+
     let observer = new IntersectionObserver(function(entries, observer) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 aboutSection.classList.add('visible');
                 observer.unobserve(aboutSection); // Stop observing once animation has triggered
-            }
-        });
-    }, { threshold: 0.5 });
-
-    observer.observe(aboutSection);
-});
-
-//animation about section
-document.addEventListener("DOMContentLoaded", function() {
-    let aboutSection = document.getElementById('about');
-
-    let observer = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                aboutSection.classList.add('visible');
-                aboutSection.classList.remove('hidden');
-            } else {
-                aboutSection.classList.remove('visible');
-                aboutSection.classList.add('hidden');
             }
         });
     }, { threshold: 0.5 });
@@ -285,54 +581,62 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    let currentIndex = 0;
-    const skillsGrid = document.querySelector('.skills-grid');
-    const skillBoxes = document.querySelectorAll('.skill-box');
-    const leftBtn = document.querySelector('.left-btn');
-    const rightBtn = document.querySelector('.right-btn');
-    const boxWidth = skillBoxes[0].offsetWidth + 20; // Get the width of one skill box including margin
-
-    const updateCarousel = (direction) => {
-        if (direction === 'right' && currentIndex < skillBoxes.length - 3) {
-            currentIndex++;
-        } else if (direction === 'left' && currentIndex > 0) {
-            currentIndex--;
-        }
-
-        // Move the skill boxes
-        skillsGrid.style.transform = `translateX(-${currentIndex * boxWidth}px)`;
-
-        // Adjust visibility for the first and last boxes
-        skillBoxes.forEach((box, index) => {
-            if (index >= currentIndex && index < currentIndex + 3) {
-                box.style.opacity = 1;
-                box.style.visibility = 'visible';
-            } else {
-                box.style.opacity = 0;
-                box.style.visibility = 'hidden';
-            }
-        });
-    };
-
-    rightBtn.addEventListener('click', () => {
-        updateCarousel('right');
-    });
-
-    leftBtn.addEventListener('click', () => {
-        updateCarousel('left');
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
     const elements = document.querySelectorAll('.jump-i');
     elements.forEach((el, index) => {
         el.style.animation = `jump 0.6s ease-out ${index * 0.2 + 1}s`; // Set animation to infinite
     });
 
-    setTimeout(() => {
-        document.querySelector('.fade-text').classList.add('light-up');
-    }, 1500); // Wait for 1.5 seconds to allow the jump animation to complete
-   
+    const typedTextElement = document.getElementById('typed-text');
+
+    if (!typedTextElement) {
+        return;
+    }
+
+    const textValues = (typedTextElement.dataset.texts || "")
+        .split("|")
+        .map(text => text.trim())
+        .filter(Boolean);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!textValues.length) {
+        return;
+    }
+
+    if (reducedMotion) {
+        typedTextElement.textContent = textValues[textValues.length - 1];
+        return;
+    }
+
+    const typeSpeed = 80;
+    const deleteSpeed = 42;
+    const holdDelay = 1200;
+    const startDelay = 650;
+    let textIndex = 0;
+
+    function typeText(text, charIndex = 0) {
+        typedTextElement.textContent = text.slice(0, charIndex);
+
+        if (charIndex < text.length) {
+            window.setTimeout(() => typeText(text, charIndex + 1), typeSpeed);
+            return;
+        }
+
+        window.setTimeout(() => eraseText(text.length), holdDelay);
+    }
+
+    function eraseText(charIndex) {
+        typedTextElement.textContent = typedTextElement.textContent.slice(0, charIndex);
+
+        if (charIndex > 0) {
+            window.setTimeout(() => eraseText(charIndex - 1), deleteSpeed);
+            return;
+        }
+
+        textIndex = (textIndex + 1) % textValues.length;
+        window.setTimeout(() => typeText(textValues[textIndex]), 120);
+    }
+
+    window.setTimeout(() => typeText(textValues[0]), startDelay);
 
 });
 
@@ -350,6 +654,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }, { threshold: 0.5 });
 
     observer.observe(footer);
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const newsSection = document.getElementById('news');
+
+    if (!newsSection) {
+        return;
+    }
+
+    const newsItems = newsSection.querySelectorAll('.news-item');
+    const toggleButton = newsSection.querySelector('.news-toggle');
+
+    if (!toggleButton || newsItems.length <= 3) {
+        if (toggleButton) {
+            toggleButton.hidden = true;
+        }
+
+        return;
+    }
+
+    const collapsedLabel = 'View all updates';
+    const expandedLabel = 'Show latest 3';
+
+    function syncNewsState() {
+        const isExpanded = newsSection.classList.contains('is-expanded');
+        toggleButton.setAttribute('aria-expanded', String(isExpanded));
+        toggleButton.textContent = isExpanded ? expandedLabel : collapsedLabel;
+    }
+
+    toggleButton.addEventListener('click', function() {
+        newsSection.classList.toggle('is-expanded');
+        syncNewsState();
+    });
+
+    syncNewsState();
 });
 // Handle form submission
 document.getElementById('contact-form').addEventListener('submit', function(event) {
